@@ -2393,7 +2393,7 @@ fn render_layered() {
             AlphaFormat: 1, // AC_SRC_ALPHA
         };
 
-        let _ = UpdateLayeredWindow(
+        let rendered = UpdateLayeredWindow(
             hwnd,
             screen_dc,
             None,
@@ -2404,6 +2404,9 @@ fn render_layered() {
             Some(&blend),
             ULW_ALPHA,
         );
+        if let Err(error) = rendered {
+            diagnose::log_error("UpdateLayeredWindow failed", error);
+        }
 
         // Cleanup
         SelectObject(mem_dc, old_bmp);
